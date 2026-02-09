@@ -64,7 +64,7 @@ button:hover{transform:scale(1.05)}
     display:none;
     background:#2a0000;
     border:1px solid #7f1d1d;
-    padding:12px;
+    padding:14px;
     margin-top:18px;
     border-radius:12px;
     font-size:13px;
@@ -75,6 +75,22 @@ button:hover{transform:scale(1.05)}
     width:100%;
     border-radius:10px;
     margin-top:10px;
+}
+
+.method{
+    margin-top:12px;
+    text-align:left;
+    font-size:12px;
+    background:#1a0202;
+    padding:10px;
+    border-radius:8px;
+}
+
+.note{
+    margin-top:10px;
+    font-size:11px;
+    color:#fecaca;
+    text-align:center;
 }
 
 small{color:#fecaca}
@@ -104,15 +120,28 @@ small{color:#fecaca}
 <button onclick="tampilPembayaran()">Lanjut Pembayaran</button>
 
 <div class="payment" id="paymentBox">
-<h3>💳 Scan QRIS</h3>
-<small>Scan QRIS lalu upload bukti</small>
+<h3>💳 Pembayaran</h3>
+<small>Scan QRIS atau transfer manual</small>
 
-<!-- GANTI LINK GAMBAR QRIS KAMU -->
+<!-- GANTI KE GAMBAR QRIS ASLI KAMU -->
 <img src="https://via.placeholder.com/300x300?text=QRIS+KAMU">
+
+<div class="method">
+<b>Metode Lain:</b><br>
+OVO : 0822-5028-0037<br>
+DANA / GoPay : 0877-3331-3467<br>
+BRI : 033401109717509<br>
+SeaBank : 901853949728
+</div>
 
 <input type="file" style="margin-top:10px">
 
 <button onclick="kirimWA()">Order via WhatsApp</button>
+
+<div class="note">
+⏱️ Proses 1–5 menit setelah pembayaran<br>
+🔒 Data aman & tidak disimpan
+</div>
 </div>
 </div>
 
@@ -148,8 +177,7 @@ function kirimWA(){
 
     let id = document.getElementById("userid").value;
     let produk = document.getElementById("produk").value.split("|")[0];
-
-    let noWA = "6287733313467"; // NOMOR WA KAMU
+    let noWA = "6287733313467";
 
     let pesan =
 `Halo bang saya ingin membeli robux
