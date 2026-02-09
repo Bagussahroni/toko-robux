@@ -80,6 +80,11 @@ button:hover{transform:scale(1.05)}
     box-shadow:0 0 25px rgba(239,68,68,.6);
 }
 
+.upload-btn{
+    display:none;
+    margin-top:10px;
+}
+
 .note{
     margin-top:10px;
     font-size:11px;
@@ -122,10 +127,19 @@ button:hover{transform:scale(1.05)}
 <option value="SeaBank">SeaBank</option>
 </select>
 
-<!-- ✅ QRIS FIX -->
 <img src="qris.jpg" class="qris-img" id="qrisImg">
 
-<input type="file" style="margin-top:10px">
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSdDKw1mlvdeWjZNcoiF1DUNTRTagdBJGAhu4V5vteHjjvt62Q/viewform?usp=publish-editor"
+   target="_blank"
+   class="upload-btn"
+   id="uploadBtn"
+   style="text-decoration:none">
+
+  <button type="button">
+    📤 Upload Bukti Pembayaran
+  </button>
+
+</a>
 
 <button onclick="kirimWA()">Kirim Order ke WhatsApp</button>
 
@@ -161,7 +175,8 @@ function tampilPembayaran(){
 
 function tampilQRIS(){
     let metode = document.getElementById("metode").value;
-    qrisImg.style.display = (metode === "QRIS") ? "block" : "none";
+    qrisImg.style.display = metode === "QRIS" ? "block" : "none";
+    uploadBtn.style.display = metode === "QRIS" ? "block" : "none";
 }
 
 function kirimWA(){
@@ -185,7 +200,7 @@ function kirimWA(){
 > Harga: ${hargaText}
 > Metode Bayar: ${metode}
 
-Saya tunggu proses nya ya! `;
+Bukti pembayaran sudah saya upload 👌`;
 
     window.open("https://wa.me/"+noWA+"?text="+encodeURIComponent(pesan));
 }
