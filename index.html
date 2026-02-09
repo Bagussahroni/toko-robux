@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -123,8 +122,8 @@ button:hover{transform:scale(1.05)}
 <option value="SeaBank">SeaBank</option>
 </select>
 
-<!-- GANTI DENGAN LINK QRIS ASLI -->
-<img src="assets/qris.jpg" class="qris-img" id="qrisImg">
+<!-- ✅ QRIS FIX -->
+<img src="qris.jpg" class="qris-img" id="qrisImg">
 
 <input type="file" style="margin-top:10px">
 
@@ -162,8 +161,7 @@ function tampilPembayaran(){
 
 function tampilQRIS(){
     let metode = document.getElementById("metode").value;
-    document.getElementById("qrisImg").style.display =
-        metode === "QRIS" ? "block" : "none";
+    qrisImg.style.display = (metode === "QRIS") ? "block" : "none";
 }
 
 function kirimWA(){
