@@ -5,12 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bagus Robux Store</title>
 
-<!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 body{
-    background: 
+    background:
         linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
         url("https://img.freepik.com/free-photo/portrait-anime-character-with-stars_23-2151556365.jpg?semt=ais_hybrid&w=740&q=80")
         no-repeat center center fixed;
@@ -20,7 +19,7 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
+    min-height:100vh;
     margin:0;
 }
 .box{
@@ -30,114 +29,136 @@ body{
     width:100%;
     max-width:380px;
     border-radius:18px;
-    box-shadow: 0 25px 60px rgba(0,0,0,.7);
-    animation: fadeUp .8s ease;
+    box-shadow:0 25px 60px rgba(0,0,0,.7);
 }
-h2,h3{
-    text-align:center;
-}
-h2{
-    color:#fca5a5;
-}
-input, select, button{
+h2,h3{text-align:center}
+h2{color:#fca5a5}
+
+input,select,button{
     width:100%;
     margin-top:12px;
     padding:11px;
     border-radius:10px;
     border:none;
-    font-size:14px;
 }
-input, select{
+input,select{
     background:#2a0000;
     color:white;
 }
-input::placeholder{
-    color:#fecaca;
-}
 button{
-    background: linear-gradient(135deg,#ef4444,#b91c1c);
+    background:linear-gradient(135deg,#ef4444,#b91c1c);
     color:white;
     font-weight:600;
     cursor:pointer;
-    transition:.3s;
 }
-button:hover{
-    transform: scale(1.05);
+button:hover{transform:scale(1.05)}
+
+.price{
+    text-align:center;
+    margin-top:10px;
+    color:#fecaca;
+    font-weight:600;
 }
+
 .payment{
+    display:none;
     background:#2a0000;
     border:1px solid #7f1d1d;
     padding:12px;
     margin-top:18px;
     border-radius:12px;
     font-size:13px;
-}
-small{
-    color:#fecaca;
+    text-align:center;
 }
 
-@keyframes fadeUp {
-    from { opacity:0; transform: translateY(30px); }
-    to { opacity:1; transform: translateY(0); }
+.payment img{
+    width:100%;
+    border-radius:10px;
+    margin-top:10px;
 }
+
+small{color:#fecaca}
 </style>
 </head>
 
 <body>
 
 <div class="box">
-    <h2>💎 Bagus Robux Store</h2>
+<h2>💎 Bagus Robux Store</h2>
 
-    <input type="text" id="userid" placeholder="User ID Roblox">
+<input type="text" id="userid" placeholder="User ID Roblox">
 
-    <select id="produk">
-        <option>100 Robux - Rp13.000</option>
-        <option>300 Robux - Rp39.000</option>
-        <option>500 Robux - Rp65.000</option>
-        <option>800 Robux (+10 bonus) - Rp104.000</option>
-        <option>1.000 Robux (+20 bonus) - Rp130.000</option>
-        <option>1.500 Robux (+50 bonus) - Rp195.000</option>
-        <option>2.000 Robux (+100 bonus) - Rp260.000</option>
-    </select>
+<select id="produk" onchange="updateHarga()">
+<option value="">-- Pilih Paket --</option>
+<option value="100 Robux|13000">100 Robux</option>
+<option value="300 Robux|39000">300 Robux</option>
+<option value="500 Robux|65000">500 Robux</option>
+<option value="800 Robux (+10 bonus)|104000">800 Robux (+10 bonus)</option>
+<option value="1.000 Robux (+20 bonus)|130000">1.000 Robux (+20 bonus)</option>
+<option value="1.500 Robux (+50 bonus)|195000">1.500 Robux (+50 bonus)</option>
+<option value="2.000 Robux (+100 bonus)|260000">2.000 Robux (+100 bonus)</option>
+</select>
 
-    <button onclick="kirimWA()">Order via WhatsApp</button>
+<div class="price" id="harga">💰 Harga: -</div>
 
-    <div class="payment">
-        <h3>💳 Pembayaran</h3>
-        🔹 <b>QRIS</b><br>
-        <small>Link dikirim admin</small><br><br>
+<button onclick="tampilPembayaran()">Lanjut Pembayaran</button>
 
-        🔹 <b>OVO</b><br>
-        0822-5028-0037<br><br>
+<div class="payment" id="paymentBox">
+<h3>💳 Scan QRIS</h3>
+<small>Scan QRIS lalu upload bukti</small>
 
-        🔹 <b>DANA / GoPay</b><br>
-        0877-3331-3467<br><br>
+<!-- GANTI LINK GAMBAR QRIS KAMU -->
+<img src="https://via.placeholder.com/300x300?text=QRIS+KAMU">
 
-        🔹 <b>BRI</b><br>
-        033401109717509<br><br>
+<input type="file" style="margin-top:10px">
 
-        🔹 <b>SeaBank</b><br>
-        901853949728
-    </div>
+<button onclick="kirimWA()">Order via WhatsApp</button>
+</div>
 </div>
 
-<script>
-function kirimWA(){
-    let id = document.getElementById("userid").value;
-    let produk = document.getElementById("produk").value;
+<audio id="notif">
+<source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+</audio>
 
-    if(id == ""){
+<script>
+let hargaText = "";
+
+function updateHarga(){
+    let val = document.getElementById("produk").value;
+    if(!val) return;
+    let data = val.split("|");
+    hargaText = "Rp " + Number(data[1]).toLocaleString("id-ID");
+    document.getElementById("harga").innerText = "💰 Harga: " + hargaText;
+}
+
+function tampilPembayaran(){
+    if(document.getElementById("userid").value == ""){
         alert("User ID wajib diisi!");
         return;
     }
+    if(document.getElementById("produk").value == ""){
+        alert("Pilih paket dulu!");
+        return;
+    }
+    document.getElementById("paymentBox").style.display="block";
+}
+
+function kirimWA(){
+    document.getElementById("notif").play();
+
+    let id = document.getElementById("userid").value;
+    let produk = document.getElementById("produk").value.split("|")[0];
 
     let noWA = "6287733313467"; // NOMOR WA KAMU
-    let pesan = `Halo bang saya ingin membeli robux
+
+    let pesan =
+`Halo bang saya ingin membeli robux
 
 🆔 User ID: ${id}
 💎 Paket: ${produk}
+💰 Harga: ${hargaText}
 
-Mohon info pembayaran ya 🙏`;
+Bukti pembayaran sudah saya upload 🙏`;
 
     window.open("https://wa.me/"+noWA+"?text="+encodeURIComponent(pesan));
 }
