@@ -11,7 +11,7 @@
 body{
     background:
         linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
-        url("https://img.freepik.com/free-photo/portrait-anime-character-with-stars_23-2151556365.jpg?semt=ais_hybrid&w=740&q=80")
+        url("https://img.freepik.com/free-photo/portrait-anime-character-with-stars_23-2151556365.jpg")
         no-repeat center center fixed;
     background-size: cover;
     font-family: 'Poppins', sans-serif;
@@ -71,29 +71,20 @@ button:hover{transform:scale(1.05)}
     text-align:center;
 }
 
-.payment img{
+.qris-img{
+    display:none;
     width:100%;
-    border-radius:10px;
-    margin-top:10px;
-}
-
-.method{
-    margin-top:12px;
-    text-align:left;
-    font-size:12px;
-    background:#1a0202;
-    padding:10px;
-    border-radius:8px;
+    max-width:260px;
+    margin:12px auto;
+    border-radius:12px;
+    box-shadow:0 0 25px rgba(239,68,68,.6);
 }
 
 .note{
     margin-top:10px;
     font-size:11px;
     color:#fecaca;
-    text-align:center;
 }
-
-small{color:#fecaca}
 </style>
 </head>
 
@@ -120,33 +111,33 @@ small{color:#fecaca}
 <button onclick="tampilPembayaran()">Lanjut Pembayaran</button>
 
 <div class="payment" id="paymentBox">
-<h3>💳 Pembayaran</h3>
-<small>Scan QRIS atau transfer manual</small>
+<h3>💳 Pilih Metode Pembayaran</h3>
 
-<!-- GANTI KE GAMBAR QRIS ASLI KAMU -->
-<img src="https://via.placeholder.com/300x300?text=QRIS+KAMU">
+<select id="metode" onchange="tampilQRIS()">
+<option value="">-- Pilih Pembayaran --</option>
+<option value="QRIS">QRIS</option>
+<option value="OVO">OVO</option>
+<option value="DANA / GoPay">DANA / GoPay</option>
+<option value="BRI">BRI</option>
+<option value="SeaBank">SeaBank</option>
+</select>
 
-<div class="method">
-<b>Metode Lain:</b><br>
-OVO : 0822-5028-0037<br>
-DANA / GoPay : 0877-3331-3467<br>
-BRI : 033401109717509<br>
-SeaBank : 901853949728
-</div>
+<!-- GANTI DENGAN LINK QRIS ASLI -->
+<img src="assets/qris.jpg" class="qris-img" id="qrisImg">
 
 <input type="file" style="margin-top:10px">
 
-<button onclick="kirimWA()">Order via WhatsApp</button>
+<button onclick="kirimWA()">Kirim Order ke WhatsApp</button>
 
 <div class="note">
-⏱️ Proses 1–5 menit setelah pembayaran<br>
-🔒 Data aman & tidak disimpan
+⏱️ Proses cepat setelah pembayaran<br>
+📸 Pastikan bukti jelas
 </div>
 </div>
 </div>
 
 <audio id="notif">
-<source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+<source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3">
 </audio>
 
 <script>
@@ -161,21 +152,29 @@ function updateHarga(){
 }
 
 function tampilPembayaran(){
-    if(document.getElementById("userid").value == ""){
-        alert("User ID wajib diisi!");
+    if(!userid.value || !produk.value){
+        alert("Lengkapi data dulu!");
         return;
     }
-    if(document.getElementById("produk").value == ""){
-        alert("Pilih paket dulu!");
-        return;
-    }
-    document.getElementById("paymentBox").style.display="block";
+    paymentBox.style.display="block";
+}
+
+function tampilQRIS(){
+    let metode = document.getElementById("metode").value;
+    document.getElementById("qrisImg").style.display =
+        metode === "QRIS" ? "block" : "none";
 }
 
 function kirimWA(){
-    document.getElementById("notif").play();
+    let metode = document.getElementById("metode").value;
+    if(!metode){
+        alert("Pilih metode pembayaran!");
+        return;
+    }
 
-    let id = document.getElementById("userid").value;
+    notif.play();
+
+    let id = userid.value;
     let produk = document.getElementById("produk").value.split("|")[0];
     let noWA = "6287733313467";
 
@@ -185,6 +184,7 @@ function kirimWA(){
 🆔 User ID: ${id}
 💎 Paket: ${produk}
 💰 Harga: ${hargaText}
+💳 Metode Bayar: ${metode}
 
 Bukti pembayaran sudah saya upload 🙏`;
 
